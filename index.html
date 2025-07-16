@@ -8,12 +8,20 @@
     <link rel="icon" href="assets\images\Logo White background.png" type="image/png">
 </head>
 <body>
-
     <div id="loading-screen">
         <img src="assets/images/Logo Loading.gif" alt="Loading..." class="loading-gif">
     </div>
 
     <div id="main-content">
+        <div id="addAndSaveTasks">
+            <div id="todo-header">
+                    <h1>PROGRESSION</h1>
+                    <div id="todo-input-container">
+                        <input type="text" id="todo-input" placeholder="ADD A NEW TASK" autocomplete="off">
+                        <button id="add-todo-button">ADD</button>
+                    </div>
+                </div>
+        </div>
         <div id="content-wrapper">
             <div id="user-card">
                 <img src="assets/images/Logo No background.png" alt="User Avatar" class="user-avatar">
@@ -25,24 +33,10 @@
                 </div>
             </div>
             <div id="todo-list">
-                <div id="todo-header">
-                    <h1>PROGRESSION</h1>
-                    <div id="todo-input-container">
-                        <input type="text" id="todo-input" placeholder="ADD A NEW TASK" autocomplete="off">
-                        <button id="add-todo-button">ADD</button>
-                    </div>
-                </div>
-                <ol id="todo-items">
-                    <li class="todo-item">
-                        <span class="todo-text">Sample Task</span>
-                        <button class="edit-button">EDIT</button>
-                        <button class="delete-button">Delete</button>
-                    </li>
-                </ol>
+                <ol id="todo-items"></ol>
             </div>
         </div>
     </div>
-
     <script src="assets/script.js"></script>
 </body>
 </html>

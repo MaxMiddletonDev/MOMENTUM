@@ -1,3 +1,6 @@
+/* ========================================
+   FONTS & IMPORTS
+   ======================================== */
 @font-face {
     font-family: 'arcadeclassicregular';
     src: url('font/arcadeclassic.woff2') format('woff2'),
@@ -6,6 +9,9 @@
     font-style: normal;
 }
 
+/* ========================================
+   GLOBAL STYLES & RESET
+   ======================================== */
 * {
     margin: 0;
     padding: 0;
@@ -24,6 +30,9 @@
     text-rendering: optimizeSpeed;
 }
 
+/* ========================================
+   LOADING SCREEN STYLES
+   ======================================== */
 #loading-screen {
     position: fixed; 
     top: 0;
@@ -39,6 +48,11 @@
     transition: opacity 0.5s ease-out; 
 }
 
+#loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden; 
+}
+
 .loading-gif {
     width: 400px; 
     height: auto;
@@ -46,15 +60,9 @@
     animation-iteration-count: 1; 
 }
 
-#loading-screen.hidden {
-    opacity: 0;
-    visibility: hidden; 
-}
-
-#main-content.fade-in {
-    opacity: 1;
-}
-
+/* ========================================
+   MAIN CONTENT LAYOUT
+   ======================================== */
 #main-content {
     position: fixed;
     top: 0;
@@ -63,10 +71,14 @@
     height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    flex-direction: row;
     opacity: 0;
     transition: opacity 0.8s ease-in-out;
+    margin: 90px auto;
+}
+
+#main-content.fade-in {
+    opacity: 1;
 }
 
 #content-wrapper {
@@ -75,9 +87,12 @@
     flex-direction: column;
     width: 50%;
     height: 70%;
-    border: black 2px solid;
+    border: 2px solid black;
 }
 
+/* ========================================
+   USER CARD SECTION
+   ======================================== */
 #user-card {
     display: flex;
     justify-content: flex-start;
@@ -85,7 +100,7 @@
     flex-direction: row;
     width: 100%;
     height: auto;
-    border-bottom: black 2px solid;
+    border-bottom: 2px solid black;
     margin-bottom: 20px;
 }
 
@@ -96,6 +111,10 @@
 #user-details h1 {
     padding-left: 3px;
 }
+
+/* ========================================
+   PROGRESS BAR COMPONENTS
+   ======================================== */
 .progress-container {
     width: 120%;
     height: 20px;
@@ -112,6 +131,9 @@
     border-radius: 8px;
 }
 
+/* ========================================
+   TODO LIST CONTAINER
+   ======================================== */
 #todo-list {
     display: flex;
     align-items: center;
@@ -119,7 +141,9 @@
     width: 90%;
     height: 100%;
     margin-bottom: 3%;
-    border: rgb(0, 0, 0) 2px solid;
+    border: 2px solid rgb(0, 0, 0);
+    overflow: hidden; 
+    padding: 10px;
 }
 
 #todo-header {
@@ -137,8 +161,22 @@
 
 #todo-list h1 {
     height: auto;
-    border-bottom: black 2px solid;
+    border-bottom: 2px solid black;
     margin-bottom: 20px;
+}
+
+/* ========================================
+   TODO ADDING AND SAVING SECTION
+   ======================================== */
+
+#addAndSaveTasks {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 20%;
+    height: 70%;
+    margin: 0px 20px 0px 0px;
+    border: 2px solid black;
 }
 
 #todo-input-container {
@@ -166,6 +204,9 @@
     font-size: 20px;
 }
 
+/* ========================================
+   BUTTONS
+   ======================================== */
 #add-todo-button {
     background-color: #4CAF50;
     color: white;
@@ -185,38 +226,7 @@
     transform: scale(1.05);
 }
 
-#todo-items {
-    width: 100%;
-    list-style: none;
-    padding: 0 20px;
-}
-
-.todo-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 10px;
-    border: 2px solid black;
-    border-radius: 8px;
-    background-color: white;
-    transition: all 0.3s ease;
-}
-
-.todo-item:hover {
-    background-color: #f8f8f8;
-}
-
-.todo-text {
-    flex: 1;
-    font-size: 12px;
-    color: black;
-    word-wrap: break-word;
-    margin-right: 15px;
-}
-
-.edit-button {
+.complete-button {
     background-color: #4CAF50;
     color: white;
     border: 2px solid black;
@@ -226,6 +236,32 @@
     font-family: 'arcadeclassicregular';
     font-size: 10px;
     transition: all 0.3s ease;
+    margin-left: 5px;
+    flex-shrink: 0;
+}
+
+.complete-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.edit-button {
+    background-color: #0075fa;
+    color: white;
+    border: 2px solid black;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'arcadeclassicregular';
+    font-size: 10px;
+    transition: all 0.3s ease;
+    margin-left: 5px;
+    flex-shrink: 0;
+}
+
+.edit-button:hover {
+    background-color: #0068df;
+    transform: scale(1.05);
 }
 
 .delete-button {
@@ -238,6 +274,8 @@
     font-family: 'arcadeclassicregular';
     font-size: 10px;
     transition: all 0.3s ease;
+    margin-left: 5px;
+    flex-shrink: 0;
 }
 
 .delete-button:hover {
@@ -245,7 +283,73 @@
     transform: scale(1.05);
 }
 
-.edit-button:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
+/* ========================================
+   TODO ITEMS
+   ======================================== */
+#todo-items {
+    width: 100%;
+    list-style: none;
+    padding: 0 20px;
+    margin: 0;
+    overflow-y: auto;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.todo-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: white;
+    transition: all 0.3s ease;
+    min-height: 50px;
+}
+
+.todo-item:hover {
+    background-color: #f8f8f8;
+}
+
+.todo-text {
+    flex: 1;
+    font-size: 16px;
+    color: black;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    margin-right: 15px;
+    min-width: 0;
+}
+
+/* ========================================
+   SCROLLBAR STYLING
+   ======================================== */
+#todo-items::-webkit-scrollbar {
+    width: 6px;
+}
+
+#todo-items::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#todo-items::-webkit-scrollbar-thumb {
+    background: black;
+    border-radius: 0;
+}
+
+#todo-items::-webkit-scrollbar-thumb:hover {
+    background: #333;
+}
+
+#todo-items::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+#todo-items {
+    scrollbar-width: thin;
+    scrollbar-color: black transparent;
 }
