@@ -1,0 +1,98 @@
+@font-face {
+    font-family: 'arcadeclassicregular';
+    src: url('font/arcadeclassic.woff2') format('woff2'),
+         url('font/arcadeclassic.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    font-family: 'arcadeclassicregular';
+}
+
+#loading-screen {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255); 
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    z-index: 9999; 
+    transition: opacity 0.5s ease-out; 
+}
+
+.loading-gif {
+    width: 400px; 
+    height: auto;
+    margin-bottom: 20px;
+    animation-iteration-count: 1; 
+}
+
+#loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden; 
+}
+
+#main-content.fade-in {
+    opacity: 1;
+}
+
+#main-content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+#content-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+    height: 70%;
+    border: black 2px solid;
+}
+
+#user-card {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+    height: auto;
+    border-bottom: black 2px solid;
+    margin-bottom: 20px;
+}
+
+#todo-list {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    border: black 2px solid;
+}
+#todo-list h1 {
+    font-size: 2em;
+    margin: 0;
+}
