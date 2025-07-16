@@ -25,11 +25,17 @@
                 </div>
             </div>
             <div id="todo-list">
-                <h1>PROGRESSION</h1>
-                <input type="text" id="todo-input" placeholder="ADD A NEW TASK" autocomplete="off">
+                <div id="todo-header">
+                    <h1>PROGRESSION</h1>
+                    <div id="todo-input-container">
+                        <input type="text" id="todo-input" placeholder="ADD A NEW TASK" autocomplete="off">
+                        <button id="add-todo-button">ADD</button>
+                    </div>
+                </div>
                 <ol id="todo-items">
                     <li class="todo-item">
                         <span class="todo-text">Sample Task</span>
+                        <button class="edit-button">EDIT</button>
                         <button class="delete-button">Delete</button>
                     </li>
                 </ol>
