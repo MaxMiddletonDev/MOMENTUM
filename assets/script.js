@@ -1,59 +1,176 @@
-document.addEventListener('DOMContentLoaded', () => {
-    
-    const loadingScreen = document.getElementById('loading-screen');
-    const mainContent = document.getElementById('main-content');
-    const loadingGif = document.querySelector('.loading-gif');
+// ========================================
+// CONFIGURATION & STATE
+// ========================================
+const CONFIG = {
+    GIF_DURATION: 5300,
+    FALLBACK_TIMEOUT: 8000,
+    FADE_DURATION: 800
+};
 
-    const GIF_DURATION = 5300;
-    const FALLBACK_TIMEOUT = 8000; 
-    const FADE_DURATION = 800; 
+let gameState = {
+    experience: 0
+};
 
-    const showMainContent = () => {
-        mainContent.classList.add('fade-in');
-        loadingScreen.classList.add('hidden');
-        setTimeout(() => loadingScreen.remove(), FADE_DURATION);
-    };
+// ========================================
+// LOADING SCREEN MODULE
+// ========================================
+const LoadingScreen = {
+    elements: {
+        loadingScreen: null,
+        mainContent: null,
+        loadingGif: null
+    },
 
-    const handleGifEnd = () => {
-        loadingGif.src = 'assets/images/Logo No Background.png';
-        setTimeout(showMainContent, 1000);
-    };
+    init() {
+        this.elements.loadingScreen = document.getElementById('loading-screen');
+        this.elements.mainContent = document.getElementById('main-content');
+        this.elements.loadingGif = document.querySelector('.loading-gif');
+        
+        this.setupLoading();
+    },
 
-    const handleLoading = () => {
-        setTimeout(handleGifEnd, GIF_DURATION);
+    showMainContent() {
+        this.elements.mainContent.classList.add('fade-in');
+        this.elements.loadingScreen.classList.add('hidden');
+        setTimeout(() => this.elements.loadingScreen.remove(), CONFIG.FADE_DURATION);
+    },
 
-        setTimeout(showMainContent, FALLBACK_TIMEOUT);
-    };
+    handleGifEnd() {
+        this.elements.loadingGif.src = 'assets/images/Logo No Background.png';
+        setTimeout(() => this.showMainContent(), 1000);
+    },
 
-    if (loadingGif.complete) {
-        handleLoading();
-    } else {
-        loadingGif.addEventListener('load', handleLoading);
-    }
+    handleLoading() {
+        setTimeout(() => this.handleGifEnd(), CONFIG.GIF_DURATION);
+        setTimeout(() => this.showMainContent(), CONFIG.FALLBACK_TIMEOUT);
+    },
 
-    const addButton = document.getElementById('add-todo-button');
-        addButton.addEventListener('click', () => {
-        if (!document.getElementById('todo-input').value.trim()) {
-            return;
+    setupLoading() {
+        if (this.elements.loadingGif.complete) {
+            this.handleLoading();
+        } else {
+            this.elements.loadingGif.addEventListener('load', () => this.handleLoading());
         }
-        const todoInput = document.getElementById('todo-input');
-        const todoText = todoInput.value.trim();
+    }
+};
 
-        const todoList = document.getElementById('todo-items');
-        var todoItem = document.createElement('li');
+// ========================================
+// EXPERIENCE SYSTEM MODULE
+// ========================================
+const ExperienceSystem = {
+    addExperience() {
+        const points = Math.floor(Math.random() * 9) + 1;
+        gameState.experience += points;
+        console.log(`Experience points: ${gameState.experience}`);
+        return points;
+    },
+
+    getExperience() {
+        return gameState.experience;
+    }
+};
+
+// ========================================
+// TODO ITEM MODULE
+// ========================================
+const TodoItem = {
+    create(text) {
+        const todoItem = document.createElement('li');
         todoItem.className = 'todo-item';
         todoItem.innerHTML = `
-            <span class="todo-text">${todoText}</span>
+            <span class="todo-text">${text}</span>
             <button class="complete-button">Complete</button>
             <button class="edit-button">Edit</button>
             <button class="delete-button">Delete</button>
         `;
-        todoList.appendChild(todoItem);
-        todoInput.value = '';
+        
+        this.attachEventListeners(todoItem);
+        return todoItem;
+    },
 
+    attachEventListeners(todoItem) {
+        const completeButton = todoItem.querySelector('.complete-button');
+        const editButton = todoItem.querySelector('.edit-button');
         const deleteButton = todoItem.querySelector('.delete-button');
-        deleteButton.addEventListener('click', () => {
-            todoList.removeChild(todoItem);
+        const todoList = document.getElementById('todo-items');
+
+        completeButton.addEventListener('click', () => {
+            this.handleComplete(todoItem, todoList);
         });
-    });
+
+        editButton.addEventListener('click', () => {
+            this.handleEdit(todoItem);
+        });
+
+        deleteButton.addEventListener('click', () => {
+            this.handleDelete(todoItem, todoList);
+        });
+    },
+
+    handleComplete(todoItem, todoList) {
+        todoList.removeChild(todoItem);
+        ExperienceSystem.addExperience();
+    },
+
+    handleEdit(todoItem) {
+        const todoTextSpan = todoItem.querySelector('.todo-text');
+        const currentText = todoTextSpan.textContent;
+        const newText = prompt('Edit your task:', currentText);
+        
+        if (newText !== null && newText.trim() !== '') {
+            todoTextSpan.textContent = newText.trim();
+        }
+    },
+
+    handleDelete(todoItem, todoList) {
+        todoList.removeChild(todoItem);
+    }
+};
+
+// ========================================
+// TODO LIST MODULE
+// ========================================
+const TodoList = {
+    elements: {
+        addButton: null,
+        todoInput: null,
+        todoList: null
+    },
+
+    init() {
+        this.elements.addButton = document.getElementById('add-todo-button');
+        this.elements.todoInput = document.getElementById('todo-input');
+        this.elements.todoList = document.getElementById('todo-items');
+        
+        this.setupEventListeners();
+    },
+
+    setupEventListeners() {
+        this.elements.addButton.addEventListener('click', () => this.addTodo());
+        this.elements.todoInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.addTodo();
+            }
+        });
+    },
+
+    addTodo() {
+        const todoText = this.elements.todoInput.value.trim();
+        
+        if (!todoText) {
+            return;
+        }
+
+        const todoItem = TodoItem.create(todoText);
+        this.elements.todoList.appendChild(todoItem);
+        this.elements.todoInput.value = '';
+    }
+};
+
+// ========================================
+// APPLICATION INITIALIZATION
+// ========================================
+document.addEventListener('DOMContentLoaded', () => {
+    LoadingScreen.init();
+    TodoList.init();
 });
