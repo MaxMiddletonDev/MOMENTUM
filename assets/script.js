@@ -12,6 +12,31 @@ let gameState = {
 };
 
 // ========================================
+// USER DETAIL MODULES
+// ========================================
+
+const EditUserButton = {
+    elements: {
+        editButton: null,
+        userName: null
+    },
+    init() {
+        this.elements.editButton = document.getElementById('edit-user-button');
+        this.elements.userName = document.getElementById('user-name');
+        this.elements.editButton.addEventListener('click', () => {
+            this.handleEditUser();
+        });
+    },
+
+    handleEditUser() {
+        const newUserName = prompt("Enter new user name:", this.elements.userName.textContent);
+        if (newUserName) {
+            this.elements.userName.textContent = newUserName;
+        }
+    }
+};
+
+// ========================================
 // LOADING SCREEN MODULE
 // ========================================
 const LoadingScreen = {
@@ -122,26 +147,8 @@ const TodoItem = {
     },
 
     handleEdit(todoItem) {
-        const todoTextSpan = todoItem.querySelector('.todo-text');
-        const todoText = todoTextSpan.textContent;
-        const todoDescription = todoItem.dataset.description || '';
-        const todoDifficulty = todoItem.dataset.difficulty || '';
-        const todoInput = document.getElementById('todo-input');
-        const todoDescriptionInput = document.getElementById('todo-description');
-        const todoDifficultyInput = document.getElementById('difficulty');
-        todoInput.value = todoText;
-        todoDescriptionInput.value = todoDescription;
-        todoDifficultyInput.value = todoDifficulty;
-        todoInput.focus();
-
-        todoInput.addEventListener('change', () => {
-            todoTextSpan.textContent = todoInput.value;
-            todoItem.dataset.description = todoDescriptionInput.value;
-            todoItem.dataset.difficulty = todoDifficultyInput.value;
-            todoInput.value = '';
-            todoDescriptionInput.value = '';
-            todoDifficultyInput.value = '';
-        }, { once: true });
+        // Call the TodoList editTodo method to handle the edit workflow
+        TodoList.editTodo(todoItem);
     },
 
     handleDelete(todoItem, todoList) {
@@ -157,12 +164,16 @@ const TodoList = {
         todoDescription: null,
         todoDifficulty: null,
         addButton: null,
+        saveButton: null,
         todoInput: null,
         todoList: null
     },
+    
+    currentEditingItem: null,
 
     init() {
         this.elements.addButton = document.getElementById('add-todo-button');
+        this.elements.saveButton = document.getElementById('save-todo-button');
         this.elements.todoInput = document.getElementById('todo-input');
         this.elements.todoList = document.getElementById('todo-items');
         this.elements.todoDescription = document.getElementById('todo-description');
@@ -172,10 +183,29 @@ const TodoList = {
     },
 
     setupEventListeners() {
-        this.elements.addButton.addEventListener('click', () => this.addTodo());
+        this.elements.addButton.addEventListener('click', () => {
+            if (this.currentEditingItem) {
+                this.cancelEdit();
+            } else {
+                this.addTodo();
+            }
+        });
+        
+        this.elements.saveButton.addEventListener('click', () => {
+            if (this.currentEditingItem) {
+                this.saveTodo();
+            } else {
+                this.addTodo();
+            }
+        });
+        
         this.elements.todoInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                this.addTodo();
+                if (this.currentEditingItem) {
+                    this.saveTodo();
+                } else {
+                    this.addTodo();
+                }
             }
         });
     },
@@ -198,9 +228,72 @@ const TodoList = {
         
         const todoItem = TodoItem.create(todoData);
         this.elements.todoList.appendChild(todoItem);
+        this.clearInputs();
+    },
+    
+    editTodo(todoItem) {
+        this.currentEditingItem = todoItem;
+ 
+        const todoTextSpan = todoItem.querySelector('.todo-text');
+        const todoText = todoTextSpan.textContent;
+        const todoDescription = todoItem.dataset.description || '';
+        const todoDifficulty = todoItem.dataset.difficulty || '';
+        
+        this.elements.todoInput.value = todoText;
+        this.elements.todoDescription.value = todoDescription;
+        this.elements.todoDifficulty.value = todoDifficulty;
+        
+        this.updateButtonStates();
+        
+        this.elements.todoInput.focus();
+    },
+    
+    saveTodo() {
+        if (!this.currentEditingItem) {
+            this.addTodo();
+            return;
+        }
+        
+        const todoText = this.elements.todoInput.value.trim();
+        
+        if (!todoText) {
+            return;
+        }
+        
+        const todoDescription = this.elements.todoDescription.value.trim();
+        const todoDifficulty = this.elements.todoDifficulty.value.trim();
+        
+        const todoTextSpan = this.currentEditingItem.querySelector('.todo-text');
+        todoTextSpan.textContent = todoText;
+        
+        this.currentEditingItem.dataset.description = todoDescription;
+        this.currentEditingItem.dataset.difficulty = todoDifficulty;
+        
+        this.clearInputs();
+        this.currentEditingItem = null;
+        this.updateButtonStates();
+    },
+    
+    cancelEdit() {
+        this.currentEditingItem = null;
+        this.clearInputs();
+        this.updateButtonStates();
+    },
+    
+    clearInputs() {
         this.elements.todoInput.value = '';
         this.elements.todoDescription.value = '';
         this.elements.todoDifficulty.value = '';
+    },
+    
+    updateButtonStates() {
+        if (this.currentEditingItem) {
+            this.elements.addButton.textContent = 'CANCEL';
+            this.elements.saveButton.textContent = 'UPDATE';
+        } else {
+            this.elements.addButton.textContent = 'ADD';
+            this.elements.saveButton.textContent = 'SAVE';
+        }
     }
 };
 
@@ -210,4 +303,5 @@ const TodoList = {
 document.addEventListener('DOMContentLoaded', () => {
     LoadingScreen.init();
     TodoList.init();
+    EditUserButton.init();
 });

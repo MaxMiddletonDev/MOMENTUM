@@ -114,6 +114,25 @@
     padding-left: 3px;
 }
 
+.user-edit-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+}
+#edit-user-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 10px;
+}
+
+.edit-icon {
+    width: 30px;
+    height: 30px;
+}
+
 /* ========================================
    PROGRESS BAR COMPONENTS
    ======================================== */
