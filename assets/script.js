@@ -58,8 +58,8 @@ const LoadingScreen = {
 // EXPERIENCE SYSTEM MODULE
 // ========================================
 const ExperienceSystem = {
-    addExperience() {
-        const points = Math.floor(Math.random() * 9) + 1;
+    addExperience(todoItem) {
+        const points = todoItem.dataset.difficulty ? parseInt(todoItem.dataset.difficulty) : Math.floor(Math.random() * 9) + 1;
         gameState.experience += points;
         console.log(`Experience points: ${gameState.experience}`);
         return points;
@@ -74,15 +74,24 @@ const ExperienceSystem = {
 // TODO ITEM MODULE
 // ========================================
 const TodoItem = {
-    create(text) {
+    create(todoData) {
         const todoItem = document.createElement('li');
         todoItem.className = 'todo-item';
         todoItem.innerHTML = `
-            <span class="todo-text">${text}</span>
+            <span class="todo-text">${todoData.text || todoData}</span>
             <button class="complete-button">Complete</button>
             <button class="edit-button">Edit</button>
             <button class="delete-button">Delete</button>
         `;
+
+        if (typeof todoData === 'object') {
+            todoItem.dataset.description = todoData.description || '';
+            todoItem.dataset.difficulty = todoData.difficulty || '';
+        } else {
+
+            todoItem.dataset.description = '';
+            todoItem.dataset.difficulty = '';
+        }
         
         this.attachEventListeners(todoItem);
         return todoItem;
@@ -109,17 +118,30 @@ const TodoItem = {
 
     handleComplete(todoItem, todoList) {
         todoList.removeChild(todoItem);
-        ExperienceSystem.addExperience();
+        ExperienceSystem.addExperience(todoItem);
     },
 
     handleEdit(todoItem) {
         const todoTextSpan = todoItem.querySelector('.todo-text');
-        const currentText = todoTextSpan.textContent;
-        const newText = prompt('Edit your task:', currentText);
-        
-        if (newText !== null && newText.trim() !== '') {
-            todoTextSpan.textContent = newText.trim();
-        }
+        const todoText = todoTextSpan.textContent;
+        const todoDescription = todoItem.dataset.description || '';
+        const todoDifficulty = todoItem.dataset.difficulty || '';
+        const todoInput = document.getElementById('todo-input');
+        const todoDescriptionInput = document.getElementById('todo-description');
+        const todoDifficultyInput = document.getElementById('difficulty');
+        todoInput.value = todoText;
+        todoDescriptionInput.value = todoDescription;
+        todoDifficultyInput.value = todoDifficulty;
+        todoInput.focus();
+
+        todoInput.addEventListener('change', () => {
+            todoTextSpan.textContent = todoInput.value;
+            todoItem.dataset.description = todoDescriptionInput.value;
+            todoItem.dataset.difficulty = todoDifficultyInput.value;
+            todoInput.value = '';
+            todoDescriptionInput.value = '';
+            todoDifficultyInput.value = '';
+        }, { once: true });
     },
 
     handleDelete(todoItem, todoList) {
@@ -132,6 +154,8 @@ const TodoItem = {
 // ========================================
 const TodoList = {
     elements: {
+        todoDescription: null,
+        todoDifficulty: null,
         addButton: null,
         todoInput: null,
         todoList: null
@@ -141,6 +165,8 @@ const TodoList = {
         this.elements.addButton = document.getElementById('add-todo-button');
         this.elements.todoInput = document.getElementById('todo-input');
         this.elements.todoList = document.getElementById('todo-items');
+        this.elements.todoDescription = document.getElementById('todo-description');
+        this.elements.todoDifficulty = document.getElementById('difficulty');
         
         this.setupEventListeners();
     },
@@ -160,10 +186,21 @@ const TodoList = {
         if (!todoText) {
             return;
         }
-
-        const todoItem = TodoItem.create(todoText);
+        
+        const todoDescription = this.elements.todoDescription.value.trim();
+        const todoDifficulty = this.elements.todoDifficulty.value.trim();
+        
+        const todoData = {
+            text: todoText,
+            description: todoDescription,
+            difficulty: todoDifficulty
+        };
+        
+        const todoItem = TodoItem.create(todoData);
         this.elements.todoList.appendChild(todoItem);
         this.elements.todoInput.value = '';
+        this.elements.todoDescription.value = '';
+        this.elements.todoDifficulty.value = '';
     }
 };
 

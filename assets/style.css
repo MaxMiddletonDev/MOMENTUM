@@ -100,8 +100,10 @@
     flex-direction: row;
     width: 100%;
     height: auto;
-    border-bottom: 2px solid black;
     margin-bottom: 20px;
+    padding: 4px;
+    border-bottom: 2px solid #000000;
+    border-radius: 0px 0px 20px 20px;
 }
 
 #user-details {
@@ -151,25 +153,22 @@
     align-items: center;
     flex-direction: column;
     width: 100%;
-    height: auto;
     margin-bottom: 20px;
-    padding: 20px;
     border-bottom: 2px solid #000000;
     border-radius: 0px 0px 20px 20px;
     background: #ffffff;
 }
 
-#todo-list h1 {
-    height: auto;
-    border-bottom: 2px solid black;
-    margin-bottom: 20px;
+#todo-header h1 {
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    margin: 20px;
 }
 
 /* ========================================
    TODO ADDING AND SAVING SECTION
    ======================================== */
 
-#addAndSaveTasks {
+#add-and-save-tasks {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -183,8 +182,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     width: 100%;
     height: auto;
+    padding: 20px;
 }
 
 #todo-input {
@@ -204,10 +205,62 @@
     font-size: 20px;
 }
 
+#todo-description {
+    width: 100%;
+    height: 100px;
+    margin-top: 10px;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-family: 'arcadeclassicregular';
+    font-size: 20px;
+    background-color: white;
+    outline: none;
+    resize: none;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    line-height: 1.2;
+}
+
+#todo-description::placeholder {
+    color: #888;
+    font-size: 20px;
+}
+
+#difficulty-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#difficulty {
+    width: 50%;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-family: 'arcadeclassicregular';
+    font-size: 20px;
+    background-color: white;
+    outline: none;
+}
+
+.button-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    margin-top: 10px;
+}
+
 /* ========================================
    BUTTONS
    ======================================== */
 #add-todo-button {
+    width: 30%;
     background-color: #4CAF50;
     color: white;
     border: 2px solid black;
@@ -216,7 +269,25 @@
     cursor: pointer;
     font-family: 'arcadeclassicregular';
     font-size: 20px;
-    margin-left: 10px;
+    transition: all 0.3s ease;
+    height: 50px;
+}
+
+#add-todo-button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+#save-todo-button {
+    width: 30%;
+    background-color: #2d49c5;
+    color: white;
+    border: 2px solid black;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'arcadeclassicregular';
+    font-size: 20px;
     transition: all 0.3s ease;
     height: 50px;
 }

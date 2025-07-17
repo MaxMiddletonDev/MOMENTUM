@@ -13,14 +13,20 @@
     </div>
 
     <div id="main-content">
-        <div id="addAndSaveTasks">
-            <div id="todo-header">
-                    <h1>PROGRESSION</h1>
-                    <div id="todo-input-container">
-                        <input type="text" id="todo-input" placeholder="ADD A NEW TASK" autocomplete="off">
-                        <button id="add-todo-button">ADD</button>
-                    </div>
+        <div id="add-and-save-tasks">
+            <div id="todo-header"><h1>TASKS</h1></div>
+            <div id="todo-input-container">
+                <input type="text" id="todo-input" placeholder="TASK LABEL" autocomplete="off">
+                <input type="text" id="todo-description" placeholder="TASK DESCRIPTION" autocomplete="off">
+                <form id="difficulty-form">
+                    <label for="difficulty">DIFFICULTY</label>
+                    <input type="number" id="difficulty" name="difficulty" min="1" max="10">
+                </form>
+                <div class="button-group">
+                    <button id="save-todo-button">SAVE</button>
+                    <button id="add-todo-button">ADD</button>
                 </div>
+            </div>
         </div>
         <div id="content-wrapper">
             <div id="user-card">
